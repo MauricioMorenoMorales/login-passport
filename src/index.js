@@ -2,12 +2,15 @@ require('dotenv').config()
 const express = require('express')
 const engine = require('ejs-mate')
 const morgan = require('morgan')
+const passport = require('passport')
 const chalk = require('chalk')
 const path = require('path')
+const session = require('express-session')
 
 //Initializations
 const app = express()
 require('./database')
+require('./passport/local-auth')
 
 //settings
 app.set('port', process.env.PORT || 4444)
@@ -18,6 +21,15 @@ app.set('view engine', 'ejs')
 //Middlewares
 app.use(morgan('dev'))
 app.use(express.urlencoded({ extended: false }))
+app.use(
+	session({
+		secret: process.env.PASSPORTSECRET,
+		resave: false,
+		saveUninitialized: false,
+	}),
+)
+app.use(passport.initialize())
+app.use(passport.session())
 
 //Routes
 app.use('', require('./routes/index.routes'))
