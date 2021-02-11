@@ -6,6 +6,7 @@ const passport = require('passport')
 const chalk = require('chalk')
 const path = require('path')
 const session = require('express-session')
+const flash = require('connect-flash')
 
 //Initializations
 const app = express()
@@ -28,8 +29,14 @@ app.use(
 		saveUninitialized: false,
 	}),
 )
+app.use(flash()) //!Always before passport and after session
 app.use(passport.initialize())
 app.use(passport.session())
+
+app.use((req, res, next) => {
+	app.locals.signupMessage = req.flash('signupMessage')
+	next()
+})
 
 //Routes
 app.use('', require('./routes/index.routes'))
