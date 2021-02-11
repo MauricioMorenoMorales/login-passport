@@ -10,7 +10,8 @@ router.get('/signup', (req, res, next) => {
 })
 
 router.post('/signup', (req, res, next) => {
-	res.send('enviado')
+	console.log(req.body)
+	res.send('received:)')
 })
 
 router.get('/login', (req, res, next) => {})
